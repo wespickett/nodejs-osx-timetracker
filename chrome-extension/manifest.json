@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+
+  "name": "Hourly Time Tracker",
+  "description": "Tracks what you work on in every hour so you can go back and see what you spent time on",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "background": {
+    "scripts": ["scripts.js"]
+  },
+  "permissions": [
+    "tabs",
+    "file:///*"
+  ]
+}
+

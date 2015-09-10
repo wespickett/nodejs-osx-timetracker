@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="socket.io.js"></script>
+<script src="timeTracking.js"></script>
+<style>
+    .screenshot {
+        display: none;
+    }
+    .current-screenshot {
+        display: block;
+    }
+    #currentImageIndexSlider {
+        width: 800px;
+    }
+</style>
+</head>
+<body>
+Time tracking page
+<span id="currentImageIndex"></span>/<span id="imageCount"></span>
+<button id="previousScreenShot">Previous</button>
+<button id="nextScreenShot">Next</button>
+<input id="currentImageIndexSlider" type="range" min="0" step="1" />
+<div id="screenShots">
+</div>
+</body>
+<html>
