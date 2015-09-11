@@ -1,5 +1,4 @@
 (function(){
-    console.log('io', io);
     var socket = io.connect('http://localhost:9009');
     var screenShots = [];
     var imgList;
@@ -7,6 +6,11 @@
     var currentImageIndexEl;
     var rangeSlider;
     var screenShotsContainer;
+	var SCREEN_CAPTURE_REMOTE_URL = 'file:///Users/wespickett/projects/timeTracker/server/screencaptures/';
+
+    window.onbeforeunload = function() {
+        socket.disconnect();
+    };
 
     function updateScreenShotAlbum() { 
         screenShotsContainer.innerHTML = '';
@@ -21,7 +25,7 @@
             }
 
             var newImg = document.createElement('img');
-            newImg.src = 'file:///Users/wespickett/projects/timetracker-server/screencaptures/' + screenShots[i];
+            newImg.src = SCREEN_CAPTURE_REMOTE_URL + screenShots[i];
             newImg.setAttribute('width', '800px');
             newImg.classList.add('screenshot');
             imgsFrag.appendChild(newImg);
@@ -36,7 +40,15 @@
         currentImageIndexEl.innerHTML = currentImageIndex;
         rangeSlider.value = currentImageIndex;
 
-        alert('Time update.')
+        setTimeLabel(imgList[0]);
+
+        //force focus on this window
+        alert('Time update.');
+    }
+
+    function setTimeLabel(imgEl) {
+        var timestamp = imgEl.getAttribute('src').split('/').pop().split('.')[0];
+        document.getElementById('timeLabel').innerHTML = moment(timestamp - 0).format('MMMM Do YYYY, h:mm:ss a');
     }
 
     function nextScreenShot() {
@@ -45,6 +57,7 @@
         imgList[currentImageIndex].classList.add('current-screenshot');
         currentImageIndexEl.innerHTML = currentImageIndex;
         rangeSlider.value = currentImageIndex;
+        setTimeLabel(imgList[currentImageIndex]);
     }
 
     function slideToImage(event) {
@@ -52,6 +65,7 @@
         currentImageIndex = this.value;
         imgList[currentImageIndex].classList.add('current-screenshot');
         currentImageIndexEl.innerHTML = currentImageIndex;
+        setTimeLabel(imgList[currentImageIndex]);
     }
 
     function previousScreenShot() {
@@ -60,10 +74,16 @@
         imgList[--currentImageIndex].classList.add('current-screenshot');
         currentImageIndexEl.innerHTML = currentImageIndex;
         rangeSlider.value = currentImageIndex;
+        setTimeLabel(imgList[currentImageIndex]);
     }
 
     socket.on('connect', function() {
         console.log('socket connected.');
+        document.body.classList.remove('not-connected');
+    });
+
+    socket.on('alreadyConnected', function() {
+        document.body.classList.add('already-connected');
     });
 
     socket.on('timeupdate', function(data) {

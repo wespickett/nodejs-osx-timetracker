@@ -2,6 +2,7 @@
 <html>
 <head>
 <script src="socket.io.js"></script>
+<script src="moment.min.js"></script>
 <script src="timeTracking.js"></script>
 <style>
     .screenshot {
@@ -13,13 +14,31 @@
     #currentImageIndexSlider {
         width: 800px;
     }
+
+    .banner {
+        display: none;
+        padding: 20px;
+        background-color: red;
+        font-size: 24px;
+    }
+
+    .not-connected .no-connection {
+        display: block;
+    }
+
+    .already-connected .duplicate-connection {
+        display: block;
+    }
 </style>
 </head>
-<body>
+<body class="not-connected">
+<div class="banner duplicate-connection">Already connected in another tab/window</div>
+<div class="banner no-connection">No connection to server</div>
 Time tracking page
 <span id="currentImageIndex"></span>/<span id="imageCount"></span>
 <button id="previousScreenShot">Previous</button>
 <button id="nextScreenShot">Next</button>
+<span id="timeLabel"></span>
 <input id="currentImageIndexSlider" type="range" min="0" step="1" />
 <div id="screenShots">
 </div>
